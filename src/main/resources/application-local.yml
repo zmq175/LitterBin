@@ -1,0 +1,39 @@
+server:
+  servlet:
+    context-path: /litter_api/
+    session:
+      timeout: 600
+  port: 1551
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/litter_bin?autoReconnect=true&useUnicode=true&characterEncoding=UTF8&useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 0q0bqzOaTEdXeCQb
+    tomcat:
+      max-wait: 25800
+      max-active: 50
+      test-on-borrow: true
+      test-while-idle: true
+      validation-query: select 1
+      max-idle: 30
+  mvc:
+    async:
+      request-timeout: 5400000
+
+mybatis:
+  config-location: classpath:mybatis-config.xml
+  mapper-locations: classpath:mapper/*.xml
+
+app:
+  id: litter_bin                            #应用ID
+apollo:
+  cacheDir: ../cache                       #配置本地配置缓存目录
+  cluster: default                           #指定使用哪个集群的配置
+  meta: http://melon.chengzhi.info:8080           #DEV环境配置中心地址
+  autoUpdateInjectedSpringProperties: true   #是否开启 Spring 参数自动更新
+  bootstrap:
+    enabled: true                            #是否开启 Apollo
+    namespaces: application                  #设置 Namespace
+    eagerLoad:
+      enabled: false                         #将 Apollo 加载提到初始化日志系统之前

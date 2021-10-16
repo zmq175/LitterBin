@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="info.chengzhi.chengzhi_litter_bin.app.infra.persistence.mapper.LitterBinPostMapper">
+  <resultMap id="BaseResultMap" type="info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinPost">
+    <id column="post_id" jdbcType="BIGINT" property="postId" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="op_status" jdbcType="SMALLINT" property="opStatus" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinPost">
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    post_id, creator, create_time, update_time, op_status
+  </sql>
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from litter_bin_post
+    where post_id = #{postId,jdbcType=BIGINT}
+  </select>
+  <select id="selectLatestPostByCreator"
+          resultType="info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinPost">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from litter_bin_post
+    where creator = #{creator}
+    order by create_time desc limit 1;
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    update litter_bin_post
+    set op_status = 0
+    where post_id = #{postId,jdbcType=BIGINT}
+  </update>
+  <insert id="insert" parameterType="info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinPost" useGeneratedKeys="true" keyProperty="postId">
+    insert into litter_bin_post (post_id, creator, create_time, 
+      update_time, op_status, content
+      )
+    values (#{postId,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{opStatus,jdbcType=SMALLINT}, #{content,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinPost" useGeneratedKeys="true" keyProperty="postId">
+    insert into litter_bin_post
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="postId != null">
+        post_id,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="opStatus != null">
+        op_status,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="postId != null">
+        #{postId,jdbcType=BIGINT},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="opStatus != null">
+        #{opStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinPost">
+    update litter_bin_post
+    <set>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="opStatus != null">
+        op_status = #{opStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where post_id = #{postId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinPost">
+    update litter_bin_post
+    set creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      op_status = #{opStatus,jdbcType=SMALLINT},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where post_id = #{postId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinPost">
+    update litter_bin_post
+    set creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      op_status = #{opStatus,jdbcType=SMALLINT}
+    where post_id = #{postId,jdbcType=BIGINT}
+  </update>
+</mapper>
