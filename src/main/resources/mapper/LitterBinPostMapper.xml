@@ -74,7 +74,7 @@
             <if test="content != null">
                 content,
             </if>
-            <if test="exireTime != null">
+            <if test="expireTime != null">
                 expire_time
             </if>
         </trim>

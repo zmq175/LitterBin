@@ -28,8 +28,19 @@
     (select tag_id from litter_bin_post_tag_mapping where post_id = #{postId})
     and op_status = 1
   </select>
+    <select id="getTagsByTagNames"
+            resultType="info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinTag">
+      select
+      <include refid="Base_Column_List"/>
+      from litter_bin_tag
+      where tag_name in
+      <foreach collection="tagNames" open="(" close=")" separator="," item="tagName">
+        #{tagName}
+      </foreach>
+      and op_status = 1
+    </select>
 
-  <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
     update litter_bin_tag
     set op_status = 0
     where tag_id = #{tagId,jdbcType=BIGINT}
@@ -84,6 +95,17 @@
         #{opStatus,jdbcType=SMALLINT},
       </if>
     </trim>
+  </insert>
+  <insert id="insertTags" keyProperty="tagId" useGeneratedKeys="true">
+    insert into litter_bin_tag
+    (tag_name, creator)
+    values
+    <foreach collection="tags" item="tag" separator="," >
+      (
+       #{tag.tagName},
+       #{tag.creator}
+      )
+    </foreach>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinTag">
     update litter_bin_tag

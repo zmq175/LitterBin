@@ -39,7 +39,7 @@ public class PostController {
 
   @RequestMapping("/addPost")
   public Object addPost(HttpServletRequest request,
-                        @RequestBody LitterBinPost post) {
+                        @RequestBody Post post) {
     try {
       LOGGER.info("post to add:{}", JSON.toJSONString(post));
       postService.addPost(post);

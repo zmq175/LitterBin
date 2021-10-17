@@ -11,7 +11,8 @@
         <setting name="defaultExecutorType" value="REUSE"/>
         <setting name="lazyLoadingEnabled" value="false"/>
     </settings>
-    <!--加载映射文件-->
-    <mappers>
-    </mappers>
+
+    <plugins>
+        <plugin interceptor="info.chengzhi.chengzhi_litter_bin.app.infra.persistence.interceptor.MybatisLogInterceptor"/>
+    </plugins>
 </configuration>

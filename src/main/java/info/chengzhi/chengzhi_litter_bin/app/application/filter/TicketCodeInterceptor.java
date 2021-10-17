@@ -45,6 +45,8 @@ public class TicketCodeInterceptor implements HandlerInterceptor {
         ThreadLocalUtils.setTicketCode(ticketCode);
         LOGGER.info("no ticket code in cookie, set ticket code: {}", ticketCode);
       }
+    } else {
+      ThreadLocalUtils.setTicketCode(ticketCode);
     }
     return true;
   }

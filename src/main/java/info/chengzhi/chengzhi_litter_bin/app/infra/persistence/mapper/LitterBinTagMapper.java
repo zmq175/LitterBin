@@ -21,4 +21,8 @@ public interface LitterBinTagMapper {
     int updateByPrimaryKey(LitterBinTag record);
 
     List<LitterBinTag> getTagsByPostId(@Param("postId") Long postId);
+
+    List<LitterBinTag> getTagsByTagNames(@Param("tagNames") List<String> tagNames);
+
+    int insertTags(@Param("tags") List<LitterBinTag> tags);
 }

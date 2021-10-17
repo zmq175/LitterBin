@@ -83,7 +83,7 @@
 <!--        <table schema="litter_bin" tableName="litter_bin_post" domainObjectName="LitterBinPost"-->
 <!--               enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"-->
 <!--               enableUpdateByExample="false" selectByExampleQueryId="false">-->
-        <table schema="litter_bin" tableName="litter_bin_tag" domainObjectName="LitterBinTag"
+        <table schema="litter_bin" tableName="litter_bin_post_tag_mapping" domainObjectName="LitterBinPostTagMapping"
                enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false" selectByExampleQueryId="false">
         </table>

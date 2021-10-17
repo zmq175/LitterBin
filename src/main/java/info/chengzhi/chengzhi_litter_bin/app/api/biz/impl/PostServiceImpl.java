@@ -13,17 +13,20 @@ import info.chengzhi.chengzhi_litter_bin.app.domain.services.core.LitterBinPostS
 import info.chengzhi.chengzhi_litter_bin.app.domain.services.core.LitterBinTagService;
 import info.chengzhi.chengzhi_litter_bin.app.domain.utils.ThreadLocalUtils;
 import info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinPost;
+import info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinPostTagMapping;
 import info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinTag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -62,7 +65,7 @@ public class PostServiceImpl implements PostService {
   }
 
   @Override
-  public void addPost(LitterBinPost post) throws Exception {
+  public void addPost(Post post) throws Exception {
     String ticketCode = ThreadLocalUtils.getTicketCode();
     if (Strings.isNullOrEmpty(ticketCode)) {
       throw new TicketCodeNotExistException("ticket code not exist");
@@ -78,8 +81,57 @@ public class PostServiceImpl implements PostService {
         throw new CreatePostTooFastException("create post too fast");
       }
     }
-    post.setCreator(ticketCode);
-    litterBinPostService.addPost(post);
+    LitterBinPost litterBinPost = new LitterBinPost();
+    litterBinPost.setCreator(ticketCode);
+    litterBinPost.setContent(post.getContent());
+    litterBinPost.setExpireTime(post.getExpireTime());
+    litterBinPostService.addPost(litterBinPost);
+
+    List<Tag> tags = post.getTags();
+    if (!CollectionUtils.isEmpty(tags)) {
+      List<String> tagNames = tags
+          .stream()
+          .map(Tag::getTagName)
+          .collect(Collectors.toList());
+      List<LitterBinTag> existTags = litterBinTagService.getTagsByTagNames(tagNames);
+      List<String> existTagNames = existTags
+          .stream()
+          .map(LitterBinTag::getTagName)
+          .collect(Collectors.toList());
+      List<LitterBinTag> tagsToAdd = tags
+          .stream()
+          .filter(tag -> !existTagNames.contains(tag.getTagName()))
+          .map(tag ->{
+            LitterBinTag litterBinTag = new LitterBinTag();
+            litterBinTag.setTagName(tag.getTagName());
+            litterBinTag.setCreator(ticketCode);
+            return litterBinTag;
+          })
+          .collect(Collectors.toList());
+      if (!CollectionUtils.isEmpty(tagsToAdd)) {
+        litterBinTagService.addTags(tagsToAdd);
+      }
+      List<LitterBinPostTagMapping> litterBinPostTagMappings = new ArrayList<>();
+      if (!CollectionUtils.isEmpty(existTags)) {
+        for (LitterBinTag existTag : existTags) {
+          LitterBinPostTagMapping tmp = new LitterBinPostTagMapping();
+          tmp.setPostId(litterBinPost.getPostId());
+          tmp.setTagId(existTag.getTagId());
+          litterBinPostTagMappings.add(tmp);
+        }
+      }
+      if (!CollectionUtils.isEmpty(tagsToAdd)) {
+        for (LitterBinTag addTag : tagsToAdd) {
+          LitterBinPostTagMapping tmp = new LitterBinPostTagMapping();
+          tmp.setPostId(litterBinPost.getPostId());
+          tmp.setTagId(addTag.getTagId());
+          litterBinPostTagMappings.add(tmp);
+        }
+      }
+      if (!CollectionUtils.isEmpty(litterBinPostTagMappings)) {
+        litterBinTagService.addMappings(litterBinPostTagMappings);
+      }
+    }
   }
 
 
