@@ -1,34 +1,94 @@
-HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+#.gitignore for intellij,java,maven,windows,macos
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### IntelliJ IDEA ###
+### IntelliJ ###
 .idea
+.idea_modules/
+/out/
+
+### log ###
+log/
+logs/
+*.log
+
 *.iws
 *.iml
 *.ipr
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+### Java ###
+*.class
 
-### VS Code ###
-.vscode/
-/log/
+# Mobile Tools for Java
+.mtj.tmp/
+
+# package files #
+*.jar
+*.war
+*.ear
+
+# vm crash logs
+hs_err_pid*
+
+### maven ###
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+### windows ###
+Thumbs.db
+ehthumbs.db
+
+Desktop.ini
+
+$RECYCLE.BIN/
+
+*.cab
+*.msi
+*.msm
+*.msp
+
+*.lnk
+
+### macos ###
+*~
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two
+Icon
+
+# Thumbnails
+._*
+
+# files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+
+# directories potentially created on remote afp share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# commitizen
+node_modules/
+package.json
+
+# ignore vm tmp swp file
+*.swp
+
+# vs code
+.settings/*
+.classpath
+.project
