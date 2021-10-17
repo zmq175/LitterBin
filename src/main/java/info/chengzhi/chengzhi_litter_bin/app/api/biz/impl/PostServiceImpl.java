@@ -3,12 +3,17 @@ package info.chengzhi.chengzhi_litter_bin.app.api.biz.impl;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
 import info.chengzhi.chengzhi_litter_bin.app.api.biz.PostService;
+import info.chengzhi.chengzhi_litter_bin.app.api.biz.response.Post;
+import info.chengzhi.chengzhi_litter_bin.app.api.biz.response.Tag;
 import info.chengzhi.chengzhi_litter_bin.app.domain.exceptions.CreatePostTooFastException;
 import info.chengzhi.chengzhi_litter_bin.app.domain.exceptions.PostContentEmptyException;
+import info.chengzhi.chengzhi_litter_bin.app.domain.exceptions.PostNotExistException;
 import info.chengzhi.chengzhi_litter_bin.app.domain.exceptions.TicketCodeNotExistException;
 import info.chengzhi.chengzhi_litter_bin.app.domain.services.core.LitterBinPostService;
+import info.chengzhi.chengzhi_litter_bin.app.domain.services.core.LitterBinTagService;
 import info.chengzhi.chengzhi_litter_bin.app.domain.utils.ThreadLocalUtils;
 import info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinPost;
+import info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinTag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +21,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -26,11 +32,33 @@ public class PostServiceImpl implements PostService {
   @Autowired
   private LitterBinPostService litterBinPostService;
 
+  @Autowired
+  private LitterBinTagService litterBinTagService;
+
   @Override
-  public LitterBinPost getPostById(Long postId) {
+  public Post getPostById(Long postId) throws PostNotExistException {
     LitterBinPost litterBinPost = litterBinPostService.getPostById(postId);
     LOGGER.info("get litter bin post: {}", JSON.toJSONString(litterBinPost));
-    return litterBinPost;
+    if (Objects.isNull(litterBinPost)) {
+      throw new PostNotExistException("post not exist.");
+    }
+    Post post = new Post();
+    post.setPostId(litterBinPost.getPostId());
+    post.setContent(litterBinPost.getContent());
+    post.setCreateTime(litterBinPost.getCreateTime());
+    post.setUpdateTime(litterBinPost.getUpdateTime());
+    post.setExpireTime(litterBinPost.getExpireTime());
+    post.setCreator(litterBinPost.getCreator());
+    List<LitterBinTag> litterBinTags = litterBinTagService.getTagsByPostId(postId);
+    List<Tag> tags = new ArrayList<>();
+    for (LitterBinTag litterBinTag : litterBinTags) {
+      Tag tag = new Tag();
+      tag.setTagId(litterBinTag.getTagId());
+      tag.setTagName(litterBinTag.getTagName());
+      tags.add(tag);
+    }
+    post.setTags(tags);
+    return post;
   }
 
   @Override

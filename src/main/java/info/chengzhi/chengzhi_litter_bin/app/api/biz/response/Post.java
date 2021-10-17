@@ -1,21 +1,27 @@
-package info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model;
+package info.chengzhi.chengzhi_litter_bin.app.api.biz.response;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
+import java.util.List;
 
-public class LitterBinPost {
+public class Post {
   private Long postId;
 
   private String creator;
 
+  @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
   private Date createTime;
 
+  @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
   private Date updateTime;
 
+  @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
   private Date expireTime;
 
-  private Short opStatus;
-
   private String content;
+
+  private List<Tag> tags;
 
   public Long getPostId() {
     return postId;
@@ -30,7 +36,7 @@ public class LitterBinPost {
   }
 
   public void setCreator(String creator) {
-    this.creator = creator == null ? null : creator.trim();
+    this.creator = creator;
   }
 
   public Date getCreateTime() {
@@ -49,20 +55,20 @@ public class LitterBinPost {
     this.updateTime = updateTime;
   }
 
-  public Short getOpStatus() {
-    return opStatus;
-  }
-
-  public void setOpStatus(Short opStatus) {
-    this.opStatus = opStatus;
-  }
-
   public String getContent() {
     return content;
   }
 
   public void setContent(String content) {
-    this.content = content == null ? null : content.trim();
+    this.content = content;
+  }
+
+  public List<Tag> getTags() {
+    return tags;
+  }
+
+  public void setTags(List<Tag> tags) {
+    this.tags = tags;
   }
 
   public Date getExpireTime() {

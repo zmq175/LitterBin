@@ -5,3 +5,6 @@ spring:
     basename: i18n/messages
     encoding: utf-8
     fallback-to-system-locale: false
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss

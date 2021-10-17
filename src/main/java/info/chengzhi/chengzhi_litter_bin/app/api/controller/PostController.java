@@ -2,6 +2,7 @@ package info.chengzhi.chengzhi_litter_bin.app.api.controller;
 
 import com.alibaba.fastjson.JSON;
 import info.chengzhi.chengzhi_litter_bin.app.api.biz.PostService;
+import info.chengzhi.chengzhi_litter_bin.app.api.biz.response.Post;
 import info.chengzhi.chengzhi_litter_bin.app.api.response.Responses;
 import info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinPost;
 import org.slf4j.Logger;
@@ -27,8 +28,8 @@ public class PostController {
   public Object getPostById(HttpServletRequest request,
                             @RequestParam("postId") Long postId) {
     try {
-      LitterBinPost litterBinPost = postService.getPostById(postId);
-      return Responses.successResponse(request, litterBinPost);
+      Post post = postService.getPostById(postId);
+      return Responses.successResponse(request, post);
     } catch (Exception e) {
       LOGGER.error("get post error, {}", e.getMessage());
       Arrays.stream(e.getStackTrace()).forEach(r -> LOGGER.error(r.toString()));

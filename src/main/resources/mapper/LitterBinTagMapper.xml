@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="info.chengzhi.chengzhi_litter_bin.app.infra.persistence.mapper.LitterBinTagMapper">
+  <resultMap id="BaseResultMap" type="info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinTag">
+    <id column="tag_id" jdbcType="BIGINT" property="tagId" />
+    <result column="tag_name" jdbcType="VARCHAR" property="tagName" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="op_status" jdbcType="SMALLINT" property="opStatus" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    tag_id, tag_name, creator, create_time, update_time, op_status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from litter_bin_tag
+    where tag_id = #{tagId,jdbcType=BIGINT} and op_status = 1
+  </select>
+
+  <select id="getTagsByPostId"
+          resultType="info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinTag">
+    select
+    <include refid="Base_Column_List"/>
+    from litter_bin_tag
+    where tag_id in
+    (select tag_id from litter_bin_post_tag_mapping where post_id = #{postId})
+    and op_status = 1
+  </select>
+
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    update litter_bin_tag
+    set op_status = 0
+    where tag_id = #{tagId,jdbcType=BIGINT}
+  </update>
+  <insert id="insert" parameterType="info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinTag">
+    insert into litter_bin_tag (tag_id, tag_name, creator, 
+      create_time, update_time, op_status
+      )
+    values (#{tagId,jdbcType=BIGINT}, #{tagName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{opStatus,jdbcType=SMALLINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinTag">
+    insert into litter_bin_tag
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tagId != null">
+        tag_id,
+      </if>
+      <if test="tagName != null">
+        tag_name,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="opStatus != null">
+        op_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tagId != null">
+        #{tagId,jdbcType=BIGINT},
+      </if>
+      <if test="tagName != null">
+        #{tagName,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="opStatus != null">
+        #{opStatus,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinTag">
+    update litter_bin_tag
+    <set>
+      <if test="tagName != null">
+        tag_name = #{tagName,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="opStatus != null">
+        op_status = #{opStatus,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where tag_id = #{tagId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="info.chengzhi.chengzhi_litter_bin.app.infra.persistence.sql.model.LitterBinTag">
+    update litter_bin_tag
+    set tag_name = #{tagName,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      op_status = #{opStatus,jdbcType=SMALLINT}
+    where tag_id = #{tagId,jdbcType=BIGINT}
+  </update>
+</mapper>
