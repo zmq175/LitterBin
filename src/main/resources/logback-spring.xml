@@ -54,7 +54,7 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
         </rollingPolicy>
         <!-- 日志输出格式： -->
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [ %thread ] - [ %-5level ] [ %logger{50} : %line ] - %msg%n</pattern>
+            <pattern>[%-5level][%d{YYYY-MM-dd'T'HH:mm：ss.SSS+0800}][%F:%line][%thread] ||traceid=%X{trace}||_msg=%msg%n</pattern>
         </layout>
     </appender>
 
